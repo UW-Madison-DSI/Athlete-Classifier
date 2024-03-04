@@ -31,7 +31,7 @@ $start = 0;
 //
 
 /**
- * Fetch a single athlete and save it to the file system and database
+ * Fetch an athlete and save it to the file system and database.
  *
  * @param  integer $id - The id of the athelete to fetch.
  * @param  string $athletesDir - The directory name to store athelete data.
@@ -103,7 +103,7 @@ function fetchAthlete($id, $athletesDir, $db) {
 }
 
 /**
- * Fetch all athletes and save them to the file system and database
+ * Fetch all athletes and save them to the file system and database.
  *
  * @param string $athletesDir - The directory name to store athelete data.
  * @param string $db - The database to store athelete data.
@@ -148,7 +148,7 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 							$ref = $item->{'$ref'};
 							$id = basename(substr($ref, 0, strpos($ref, "?")));
 
-							// fetch athlete by id
+							// fetch individual athlete by id
 							//
 							fetchAthlete($id, $athletesDir, $db);
 						}

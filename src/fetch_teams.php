@@ -30,7 +30,7 @@ $teamsDir = '../Teams';
 //
 
 /**
- * Fetch a single team and save it to the file system and database
+ * Fetch a team and save it to the file system and database.
  *
  * @param  integer $id - The id of the team to fetch.
  * @param  string $teamsDir - The directory name to store team data.
@@ -60,18 +60,23 @@ function fetchTeam($id, $teamsDir, $db) {
 }
 
 /**
- * Fetch a single team and save it to the file system and database
+ * Fetch all teams and save them to the file system and database.
  *
  * @param  integer $id - The id of the athelete to fetch.
  * @param  string $teamsDir - The directory name to store athelete data.
  * @return App\Models\Athlete
  */
 function fetchTeams($teamsDir, $db) { 
+
+	// fetch teams
+	//
 	$teams = json_decode(file_get_contents(Team::$baseUrl . '?limit=1000'));
 	if (!$teams) {
 		return;
 	}
-	
+
+	// ouput team metadata
+	//
 	echo "teams count = " . $teams->count . "\n";
 
 	// create new teams directory
@@ -90,7 +95,7 @@ function fetchTeams($teamsDir, $db) {
 		$ref = $item->{'$ref'};
 		$id = basename(substr($ref, 0, strpos($ref, "?")));
 
-		// fetch team by id
+		// fetch individual team by id
 		//
 		fetchTeam($id, $teamsDir, $db);
 	}
