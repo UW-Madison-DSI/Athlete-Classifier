@@ -9,7 +9,7 @@
 #        Author(s): Abe Megahed                                                #
 #                                                                              #
 ################################################################################
-#     Copyright (C) 2023, Data Science Institute, University of Wisconsin      #
+#     Copyright (C) 2024, Data Science Institute, University of Wisconsin      #
 ################################################################################
 
 from deepface import DeepFace
