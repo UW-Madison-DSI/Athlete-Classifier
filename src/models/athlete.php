@@ -42,7 +42,7 @@ class Athlete extends Model {
 	}
 
 	/**
-	 * Get this athlete's table.
+	 * Get this athlete's database table.
 	 *
 	 * @return string
 	 */
@@ -76,7 +76,7 @@ class Athlete extends Model {
 	//
 
 	/**
-	 * Get this athlete's data to a directory.
+	 * Save this athlete's data to a directory.
 	 *
 	 * @return null
 	 */
@@ -106,7 +106,7 @@ class Athlete extends Model {
 	}
 
 	/**
-	 * Get this athlete's demographic data to a directory.
+	 * Save this athlete's demographic data to a directory.
 	 *
 	 * @return null
 	 */
@@ -124,7 +124,7 @@ class Athlete extends Model {
 	}
 
 	/**
-	 * Get this athlete's demographic data to a directory.
+	 * Store this athlete's demographic data to a database.
 	 *
 	 * @return null
 	 */

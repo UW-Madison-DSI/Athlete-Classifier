@@ -85,7 +85,7 @@ abstract class Model {
 	//
 
 	/**
-	 * Store this team in the database.
+	 * Store this model in the database.
 	 *
 	 * @return bool - success
 	 */
@@ -113,7 +113,7 @@ abstract class Model {
 	//
 
 	/**
-	 * Save this team to a file.
+	 * Save this model to a file.
 	 *
 	 * @return bool - success
 	 */
@@ -131,7 +131,7 @@ abstract class Model {
 	}
 
 	/**
-	 * Convert this team to JSON.
+	 * Convert this model to JSON.
 	 *
 	 * @return bool - success
 	 */

@@ -33,7 +33,7 @@ class Team extends Model {
 	//
 
 	/**
-	 * Get this athlete's url.
+	 * Get this team's url.
 	 *
 	 * @return string
 	 */
@@ -42,7 +42,7 @@ class Team extends Model {
 	}
 
 	/**
-	 * Get this athlete's table.
+	 * Get this team's database table.
 	 *
 	 * @return string
 	 */
@@ -55,7 +55,7 @@ class Team extends Model {
 	//
 
 	/**
-	 * Get this athlete's data to a directory.
+	 * Save this athlete to a directory.
 	 *
 	 * @return null
 	 */

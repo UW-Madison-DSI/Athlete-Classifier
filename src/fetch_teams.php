@@ -29,6 +29,43 @@ $teamsDir = '../Teams';
 // methods
 //
 
+/**
+ * Fetch a single team and save it to the file system and database
+ *
+ * @param  integer $id - The id of the team to fetch.
+ * @param  string $teamsDir - The directory name to store team data.
+ * @param  object $db - The database to store team data.
+ * @return App\Models\Team
+ */
+function fetchTeam($id, $teamsDir, $db) { 
+
+	// fetch team
+	//
+	$team = new Team([
+		'id' => $id
+	]);
+	$team->fetch();
+
+	// save team to storage
+	//
+	$teamDir = $teamsDir . '/' . $team->get('displayName');
+	echo "saving team to " . $teamDir . "\n";
+	$team->save($teamDir);
+
+	// store team in database
+	//
+	$team->store($db);
+
+	return $team;
+}
+
+/**
+ * Fetch a single team and save it to the file system and database
+ *
+ * @param  integer $id - The id of the athelete to fetch.
+ * @param  string $teamsDir - The directory name to store athelete data.
+ * @return App\Models\Athlete
+ */
 function fetchTeams($teamsDir, $db) { 
 	$teams = json_decode(file_get_contents(Team::$baseUrl . '?limit=1000'));
 	if (!$teams) {
@@ -47,25 +84,15 @@ function fetchTeams($teamsDir, $db) {
 	//
 	for ($i = 0; $i < count($teams->items); $i++) {
 		$item = $teams->items[$i];
+
+		// parse team id from ref
+		//
 		$ref = $item->{'$ref'};
 		$id = basename(substr($ref, 0, strpos($ref, "?")));
 
-		// fetch new team
+		// fetch team by id
 		//
-		$team = new Team([
-			'id' => $id
-		]);
-		$team->fetch();
-
-		// store team in database
-		//
-		$team->store($db);
-
-		// save team to storage
-		//
-		$teamDir = $teamsDir . '/' . $team->get('displayName');
-		echo "saving team to " . $teamDir . "\n";
-		$team->save($teamDir);
+		fetchTeam($id, $teamsDir, $db);
 	}
 }
 

@@ -30,6 +30,13 @@ $start = 0;
 // methods
 //
 
+/**
+ * Fetch a single athlete and save it to the file system and database
+ *
+ * @param  integer $id - The id of the athelete to fetch.
+ * @param  string $athletesDir - The directory name to store athelete data.
+ * @return App\Models\Athlete
+ */
 function fetchAthlete($id, $athletesDir, $db) {
 
 	// fetch athelete info
@@ -89,8 +96,19 @@ function fetchAthlete($id, $athletesDir, $db) {
 	// store athlete demographics in database
 	//
 	$athlete->storeDemographics($db, $athleteDir);
+
+	// return new athlete
+	//
+	return $athlete;
 }
 
+/**
+ * Fetch all athletes and save them to the file system and database
+ *
+ * @param string $athletesDir - The directory name to store athelete data.
+ * @param string $db - The database to store athelete data.
+ * @param int $start - The first athelete to save.
+ */
 function fetchAthletes($athletesDir, $db, $start = 0) { 
 	$athletes = json_decode(file_get_contents(Athlete::$baseUrl));
 	if (!$athletes) {
