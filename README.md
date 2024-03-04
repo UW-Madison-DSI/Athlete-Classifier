@@ -45,7 +45,7 @@ Please install the DeepFace utility using the instructions provided [here](https
 There are two main script utilities: 
 
 ### 1. Athletes
-The 'fetch_athletes.php' script fetches and categorizes player data and headshots. Since there are about 12,000 players in the database, they are divided up into folders based upon the first letter of the player's last name.
+The 'fetch_athletes.php' script fetches and categorizes player data and headshots. Since there are about 12,000 players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete dataset with headshots is over 3GB in size.
 ```
 cd src
 php fetch_teams.php
