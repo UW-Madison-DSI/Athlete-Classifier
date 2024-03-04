@@ -24,6 +24,7 @@ include 'utilities/database.php';
 //
 
 $athletesDir = '../Athletes';
+$start = 0;
 
 //
 // methods
@@ -41,13 +42,9 @@ function fetchAthlete($id, $athletesDir, $db) {
 		return;
 	}
 
-	// get names
+	// create letter directory, if necessary
 	//
 	$lastName = $athlete->get('lastName');
-	$fullName = $athlete->get('fullName');
-
-	// create letter directory
-	//
 	$firstLetter = substr($lastName, 0, 1);
 	if ($firstLetter == '[') {
 		return;
@@ -57,13 +54,17 @@ function fetchAthlete($id, $athletesDir, $db) {
 		mkdir($letterDir);
 	}
 
-	// find if athelete has a headshot or already exists
+	// skip athlete if they already exist
 	//
+	$fullName = $athlete->get('fullName');
 	$athleteDir = $letterDir . '/' . $fullName;
 	if (file_exists($athleteDir)) {
 		echo "skipping " . $fullName . ", already exists. \n";
 		return;
 	}
+
+	// skip athlete if no headshot
+	//
 	if (!$athlete->has('headshot')) {
 		echo "skipping " . $fullName . ", no headshot. \n";
 		return;
@@ -81,7 +82,7 @@ function fetchAthlete($id, $athletesDir, $db) {
 	$athlete->storeDemographics($db, $athleteDir);
 }
 
-function fetchAthletes($athletesDir, $db) { 
+function fetchAthletes($athletesDir, $db, $start = 0) { 
 	$athletes = json_decode(file_get_contents(Athlete::$baseUrl));
 	if (!$athletes) {
 		return;
@@ -99,7 +100,6 @@ function fetchAthletes($athletesDir, $db) {
 
 	// iterate over athlete pages
 	//
-	$start = 0;
 	for ($i = 0; $i < $athletes->pageCount; $i++) {
 		$index = ($i * $athletes->pageSize);
 		if ($index >= $start) {
@@ -107,7 +107,13 @@ function fetchAthletes($athletesDir, $db) {
 			if ($data) {
 				for ($j = 0; $j < count($data->items); $j++) {
 					$index = ($i * $athletes->pageSize) + $j;
+
+					// check if athlete is after start index
+					//
 					if ($index > $start) {
+
+						// fetch athlete by id
+						//
 						$item = $data->items[$j];
 						if ($item) {
 							$ref = $item->{'$ref'};
@@ -125,4 +131,4 @@ function fetchAthletes($athletesDir, $db) {
 // main
 //
 
-fetchAthletes($athletesDir, $db);
+fetchAthletes($athletesDir, $db, $start);
