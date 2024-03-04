@@ -1,0 +1,33 @@
+"id","location","name","short_name","color","alternate_color","is_active","is_all_star","venue_name","venue_city","venue_state","venue_zip_code","venue_capacity","venue_grass","venue_indoor"
+1,"Atlanta","Atlanta Falcons","Falcons","a71930","000000",1,0,"Mercedes-Benz Stadium","Atlanta","GA",30313,0,0,1
+2,"Buffalo","Buffalo Bills","Bills","00338d","d50a0a",1,0,"Highmark Stadium","Orchard Park","NY",14127,0,0,0
+3,"Chicago","Chicago Bears","Bears","0b1c3a","e64100",1,0,"Soldier Field","Chicago","IL",60605,0,1,0
+4,"Cincinnati","Cincinnati Bengals","Bengals","fb4f14","000000",1,0,"Paycor Stadium","Cincinnati","OH",45202,0,0,0
+5,"Cleveland","Cleveland Browns","Browns","472a08","ff3c00",1,0,"Cleveland Browns Stadium","Cleveland","OH",44114,0,1,0
+6,"Dallas","Dallas Cowboys","Cowboys","002a5c","b0b7bc",1,0,"AT&T Stadium","Arlington","TX",76011,0,0,1
+7,"Denver","Denver Broncos","Broncos","0a2343","fc4c02",1,0,"Empower Field at Mile High","Denver","CO",80204,0,1,0
+8,"Detroit","Detroit Lions","Lions","0076b6","bbbbbb",1,0,"Ford Field","Detroit","MI",48226,0,0,1
+9,"Green Bay","Green Bay Packers","Packers","204e32","ffb612",1,0,"Lambeau Field","Green Bay","WI",54304,0,1,0
+10,"Tennessee","Tennessee Titans","Titans","4b92db","002a5c",1,0,"Nissan Stadium","Nashville","TN",37213,0,0,0
+11,"Indianapolis","Indianapolis Colts","Colts","003b75","ffffff",1,0,"Lucas Oil Stadium","Indianapolis","IN",46225,0,0,1
+12,"Kansas City","Kansas City Chiefs","Chiefs","e31837","ffb612",1,0,"GEHA Field at Arrowhead Stadium","Kansas City","MO",64129,0,1,0
+13,"Las Vegas","Las Vegas Raiders","Raiders","000000","a5acaf",1,0,"Allegiant Stadium","Las Vegas","NV",89118,0,1,1
+14,"Los Angeles","Los Angeles Rams","Rams","003594","ffd100",1,0,"Los Angeles Memorial Coliseum","Los Angeles","CA",90037,0,1,0
+15,"Miami","Miami Dolphins","Dolphins","008e97","fc4c02",1,0,"Hard Rock Stadium","Miami Gardens","FL",33056,0,1,0
+16,"Minnesota","Minnesota Vikings","Vikings","4f2683","ffc62f",1,0,"U.S. Bank Stadium","Minneapolis","MN",55415,0,0,1
+17,"New England","New England Patriots","Patriots","002a5c","c60c30",1,0,"Gillette Stadium","Foxborough","MA",2035,0,0,0
+18,"New Orleans","New Orleans Saints","Saints","d3bc8d","000000",1,0,"Caesars Superdome","New Orleans","LA",70112,0,0,1
+19,"New York","New York Giants","Giants","003c7f","c9243f",1,0,"MetLife Stadium","East Rutherford","NJ",7073,0,0,0
+20,"New York","New York Jets","Jets","115740","ffffff",1,0,"MetLife Stadium","East Rutherford","NJ",7073,0,0,0
+21,"Philadelphia","Philadelphia Eagles","Eagles","06424d","000000",1,0,"Lincoln Financial Field","Philadelphia","PA",19148,0,1,0
+22,"Arizona","Arizona Cardinals","Cardinals","a4113e","ffffff",1,0,"State Farm Stadium","Glendale","AZ",85305,0,1,1
+23,"Pittsburgh","Pittsburgh Steelers","Steelers","000000","ffb612",1,0,"Acrisure Stadium","Pittsburgh","PA",15212,0,1,0
+24,"Los Angeles","Los Angeles Chargers","Chargers","0080c6","ffc20e",1,0,"Dignity Health Sports Park","Carson","CA",90746,0,1,0
+25,"San Francisco","San Francisco 49ers","49ers","aa0000","b3995d",1,0,"Levi's Stadium","Santa Clara","CA",95054,0,1,0
+26,"Seattle","Seattle Seahawks","Seahawks","002a5c","69be28",1,0,"Lumen Field","Seattle","WA",98134,0,0,0
+27,"Tampa Bay","Tampa Bay Buccaneers","Buccaneers","bd1c36","3e3a35",1,0,"Raymond James Stadium","Tampa","FL",33607,0,1,0
+28,"Washington","Washington Commanders","Commanders","5a1414","ffb612",1,0,"FedExField","Landover","MD",20785,0,1,0
+29,"Carolina","Carolina Panthers","Panthers","0085ca","000000",1,0,"Bank of America Stadium","Charlotte","NC",28202,0,0,0
+30,"Jacksonville","Jacksonville Jaguars","Jaguars","007487","d7a22a",1,0,"EverBank Stadium","Jacksonville","FL",32202,0,1,0
+33,"Baltimore","Baltimore Ravens","Ravens","29126f","000000",1,0,"M&T Bank Stadium","Baltimore","MD",21230,0,1,0
+34,"Houston","Houston Texans","Texans","00143f","c41230",1,0,"NRG Stadium","Houston","TX",77054,0,0,1
