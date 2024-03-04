@@ -78,7 +78,7 @@ class Athlete extends Model {
 	/**
 	 * Save this athlete's data to a directory.
 	 *
-	 * @return null
+	 * @param string $dirname - the name of the directory to save to.
 	 */
 	public function save(string $dirname = '') {
 
@@ -108,7 +108,7 @@ class Athlete extends Model {
 	/**
 	 * Save this athlete's demographic data to a directory.
 	 *
-	 * @return null
+	 * @param string $dirname - the name of the directory to save to.
 	 */
 	public function saveDemographics(string $dirname = '') {
 		echo "classifying " . $this->get('fullName') . "\n";
@@ -126,7 +126,8 @@ class Athlete extends Model {
 	/**
 	 * Store this athlete's demographic data to a database.
 	 *
-	 * @return null
+	 * @param object $db - the database to store to.
+	 * @param string $dirname - the directory to read from.
 	 */
 	public function storeDemographics($db, string $dirname = '') {
 		$fullName = $this->get('fullName');

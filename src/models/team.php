@@ -57,7 +57,7 @@ class Team extends Model {
 	/**
 	 * Save this athlete to a directory.
 	 *
-	 * @return null
+	 * @param string $dirname - the name of the directory to save to.
 	 */
 	public function save(string $dirname = '') {
 
@@ -95,7 +95,7 @@ class Team extends Model {
 	/**
 	 * Convert this team to an array.
 	 *
-	 * @return bool - success
+	 * @return array
 	 */
 	public function toArray() {
 		return [
