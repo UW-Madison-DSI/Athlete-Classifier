@@ -42,13 +42,16 @@ function fetchAthlete($id, $athletesDir, $db) {
 		return;
 	}
 
-	// create letter directory, if necessary
+	// find first letter of athlete's last name
 	//
 	$lastName = $athlete->get('lastName');
 	$firstLetter = substr($lastName, 0, 1);
 	if ($firstLetter == '[') {
 		return;
 	}
+
+	// create letter directory, if necessary
+	//
 	$letterDir = ($athletesDir? $athletesDir . '/' : '') . $firstLetter;
 	if (!file_exists($letterDir)) {
 		mkdir($letterDir);
@@ -70,15 +73,21 @@ function fetchAthlete($id, $athletesDir, $db) {
 		return;
 	}
 
-	// store athlete in file system and database
+	// save athlete in file system
 	//
 	echo "saving athlete to " . $athleteDir . "\n";
 	$athlete->save($athleteDir);
+
+	// store athlete in database
+	//
 	$athlete->store($db);
 
-	// store demographics in file system and database
+	// save athlete demographics in file system
 	//
 	$athlete->saveDemographics($athleteDir);
+
+	// store athlete demographics in database
+	//
 	$athlete->storeDemographics($db, $athleteDir);
 }
 
@@ -88,6 +97,8 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 		return;
 	}
 	
+	// show athlete metadata
+	//
 	echo "athletes count = " . $athletes->count . "\n";
 	echo "page size = " . $athletes->pageSize . "\n";
 	echo "page count = " . $athletes->pageCount . "\n";
@@ -111,13 +122,16 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 					// check if athlete is after start index
 					//
 					if ($index > $start) {
-
-						// fetch athlete by id
-						//
 						$item = $data->items[$j];
 						if ($item) {
+
+							// parse athlete id from ref
+							//
 							$ref = $item->{'$ref'};
 							$id = basename(substr($ref, 0, strpos($ref, "?")));
+
+							// fetch athlete by id
+							//
 							fetchAthlete($id, $athletesDir, $db);
 						}
 					}
