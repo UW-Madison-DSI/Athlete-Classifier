@@ -55,7 +55,7 @@ define('DATABASE_NAME', 'athletics');
 ```
 
 ## Running
-There are two main script utilities: 
+Scripts are provided for fetching and processing both athletes and teams: 
 
 ### 1. Athletes
 
