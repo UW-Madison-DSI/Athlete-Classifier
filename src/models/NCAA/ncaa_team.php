@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                              fetch_athlete.php                               |
+|                               ncaa_team.php                                  |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching an NFL athlete.                   |
+|        This defines a class for fetching, storing, and saving teams.         |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,21 +16,36 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/athlete.php";
-include 'utilities/database.php';
+include "models/team.php";
 
-// create and fetch athlete
-//
-$athlete = (new Athlete([
-	'id' => 16296
-]))->fetch();
+class NCAATeam extends Team {
 
-// save athlete in file system and database
-//
-$athlete->save();
-$athlete->store($db);
+	//
+	// attributes
+	//
 
-// save demographics in file system and database
-//
-$athlete->saveDemographics();
-$athlete->storeDemographics($db);
+	public static $table = 'ncaa_teams';
+	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/college-football/seasons/2024/teams';
+
+	//
+	// methods
+	//
+
+	/**
+	 * Get this team's database table.
+	 *
+	 * @return string
+	 */
+	public function table() {
+		return self::$table;
+	}
+
+	/**
+	 * Get this team's base url.
+	 *
+	 * @return string
+	 */
+	public function baseUrl() {
+		return self::$baseUrl;
+	}
+}

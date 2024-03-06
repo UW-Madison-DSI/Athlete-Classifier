@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                                fetch_team.php                                |
+|                               nfl_athlete.php                                |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching an NFL team.                      |
+|        This defines a class for fetching, storing, and saving athletes.      |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,16 +16,36 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/team.php";
-include 'utilities/database.php';
+include "models/athlete.php";
 
-// create and fetch team
-//
-$team = (new Team([
-	'id' => 1
-]))->fetch();
+class NFLAthlete extends Athlete {
 
-// save team in file system and database
-//
-$team->save();
-$team->store($db);
+	//
+	// attributes
+	//
+
+	public static $table = 'nfl_athletes';
+	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/nfl/athletes';
+
+	//
+	// methods
+	//
+
+	/**
+	 * Get this athlete's database table.
+	 *
+	 * @return string
+	 */
+	public function table() {
+		return self::$table;
+	}
+
+	/**
+	 * Get this team's base url.
+	 *
+	 * @return string
+	 */
+	public function baseUrl() {
+		return self::$baseUrl;
+	}
+}

@@ -1,7 +1,7 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                              fetch_athletes.php                              |
+|                            fetch_nfl_athletes.php                            |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -16,14 +16,15 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/athlete.php";
+include "models/nfl/nfl_athlete.php";
 include 'utilities/database.php';
 
 //
 // variables
 //
 
-$athletesDir = '../Athletes';
+$leagueDir = '../NFL';
+$athletesDir = $leagueDir . '/Athletes';
 $start = 0;
 
 //
@@ -34,14 +35,14 @@ $start = 0;
  * Fetch an athlete and save it to the file system and database.
  *
  * @param  integer $id - The id of the athelete to fetch.
- * @param  string $athletesDir - The directory name to store athelete data.
+ * @param  string $athletesDir - The directory name to save athelete data.
  * @return App\Models\Athlete
  */
-function fetchAthlete($id, $athletesDir, $db) {
+function fetchNFLAthlete($id, $athletesDir, $db) {
 
 	// fetch athelete info
 	//
-	$athlete = new Athlete([
+	$athlete = new NFLAthlete([
 		'id' => $id
 	]);
 	$athlete->fetch();
@@ -105,12 +106,12 @@ function fetchAthlete($id, $athletesDir, $db) {
 /**
  * Fetch all athletes and save them to the file system and database.
  *
- * @param string $athletesDir - The directory name to store athelete data.
+ * @param string $athletesDir - The directory name to save athelete data.
  * @param string $db - The database to store athelete data.
  * @param int $start - The first athelete to save.
  */
-function fetchAthletes($athletesDir, $db, $start = 0) { 
-	$athletes = json_decode(file_get_contents(Athlete::$baseUrl));
+function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) { 
+	$athletes = json_decode(file_get_contents(NFLAthlete::$baseUrl));
 	if (!$athletes) {
 		return;
 	}
@@ -120,6 +121,12 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 	echo "athletes count = " . $athletes->count . "\n";
 	echo "page size = " . $athletes->pageSize . "\n";
 	echo "page count = " . $athletes->pageCount . "\n";
+
+	// create new league directory
+	//
+	if (!file_exists($leagueDir)) {
+		mkdir($leagueDir);
+	}
 
 	// create new athletes directory
 	//
@@ -132,7 +139,7 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 	for ($i = 0; $i < $athletes->pageCount; $i++) {
 		$index = ($i * $athletes->pageSize);
 		if ($index >= $start) {
-			$data = json_decode(file_get_contents(Athlete::$baseUrl . '?page=' . $i));
+			$data = json_decode(file_get_contents(NFLAthlete::$baseUrl . '?page=' . $i));
 			if ($data) {
 				for ($j = 0; $j < count($data->items); $j++) {
 					$index = ($i * $athletes->pageSize) + $j;
@@ -150,7 +157,7 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 
 							// fetch individual athlete by id
 							//
-							fetchAthlete($id, $athletesDir, $db);
+							fetchNFLAthlete($id, $athletesDir, $db);
 						}
 					}
 				}
@@ -163,4 +170,4 @@ function fetchAthletes($athletesDir, $db, $start = 0) {
 // main
 //
 
-fetchAthletes($athletesDir, $db, $start);
+fetchNFLAthletes($leagueDir, $athletesDir, $db, $start);

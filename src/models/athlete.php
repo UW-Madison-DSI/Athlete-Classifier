@@ -19,14 +19,13 @@
 include "config.php";
 include "models/model.php";
 
-class Athlete extends Model {
+abstract class Athlete extends Model {
 
 	//
 	// attributes
 	//
 
 	public static $table = 'athletes';
-	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/nfl/athletes';
 
 	//
 	// querying methods
@@ -38,7 +37,7 @@ class Athlete extends Model {
 	 * @return string
 	 */
 	public function url() {
-		return self::$baseUrl . '/' . $this->attributes['id'];
+		return $this->baseUrl() . '/' . $this->attributes['id'];
 	}
 
 	/**
@@ -140,7 +139,7 @@ class Athlete extends Model {
 
 		// add new row to database
 		//
-		update($db, 'athletes', $this->get('id'), [
+		update($db, $this->table(), $this->get('id'), [
 
 			// racial attributes
 			//

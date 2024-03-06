@@ -19,14 +19,13 @@
 include "config.php";
 include "models/model.php";
 
-class Team extends Model {
+abstract class Team extends Model {
 
 	//
 	// attributes
 	//
 
 	public static $table = 'teams';
-	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/nfl/seasons/2024/teams';
 
 	//
 	// querying methods
@@ -38,7 +37,7 @@ class Team extends Model {
 	 * @return string
 	 */
 	public function url() {
-		return self::$baseUrl . '/' . $this->attributes['id'];
+		return $this->baseUrl() . '/' . $this->attributes['id'];
 	}
 
 	/**
