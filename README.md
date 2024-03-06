@@ -45,7 +45,7 @@ Please install the DeepFace utility using the instructions provided [here](https
 ## Configuration
 
 ### 1. Database
-To configure the scripts to write to your database, locate the file "utilities/database" please make sure that the following database settings are correct for your database.
+To configure the scripts to write to your database, locate the file "utilities/database". Please make sure that the following database settings are correct for your database instance:
 
 ```
 define('DATABASE_HOST', '127.0.0.1');
