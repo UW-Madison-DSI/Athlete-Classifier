@@ -42,12 +42,25 @@ Create a database called "athletics".  Then, run [database/athletics.sql](databa
 ### 2. DeepFace
 Please install the DeepFace utility using the instructions provided [here](https://github.com/serengil/deepface).
 
+## Configuration
+
+### 1. Database
+To configure the scripts to write to your database, locate the file "utilities/database" please make sure that the following database settings are correct for your database.
+
+```
+define('DATABASE_HOST', '127.0.0.1');
+define('DATABASE_USERNAME', 'root');
+define('DATABASE_PASSWORD', 'root');
+define('DATABASE_NAME', 'athletics');
+define('DATABASE_DEBUG', FALSE);
+```
+
 ## Running
 There are two main script utilities: 
 
 ### 1. Athletes
 
-These scripts fetch and categorize player data and headshots. Since there are about many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset is about 12,000 players with headshots is over 3GB in size. The NCAA dataset is about 200,000 players.
+These scripts fetch and categorize player data and headshots. Since there are  many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset includes about 12,000 players with headshots is over 3GB in size. The NCAA dataset includes about 200,000 players.
 
 ```
 cd src
