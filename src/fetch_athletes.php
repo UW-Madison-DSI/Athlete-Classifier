@@ -5,7 +5,7 @@
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching athletes.                         |
+|        This is a utility for fetching, storing, and saving athletes.         |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |

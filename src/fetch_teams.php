@@ -5,7 +5,7 @@
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NFL teams.                        |
+|        This is a utility for fetching, storing, and saving teams.            |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
