@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                            fetch_nfl_athletes.php                            |
+|                              fetch_athletes.php                              |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NFL athletes.                     |
+|        This defines a utility for fetching athletes.                         |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -17,15 +17,8 @@
 \******************************************************************************/
 
 include "models/nfl/nfl_athlete.php";
+include "models/ncaa/ncaa_athlete.php";
 include 'utilities/database.php';
-
-//
-// variables
-//
-
-$leagueDir = '../NFL';
-$athletesDir = $leagueDir . '/Athletes';
-$start = 0;
 
 //
 // methods
@@ -34,21 +27,35 @@ $start = 0;
 /**
  * Fetch an athlete and save it to the file system and database.
  *
+ * @param  string $league - The league of the athlete to fetch.
  * @param  integer $id - The id of the athelete to fetch.
  * @param  string $athletesDir - The directory name to save athelete data.
+ * @param  object $db - The database to store athlete data.
  * @return App\Models\Athlete
  */
-function fetchNFLAthlete($id, $athletesDir, $db) {
+function fetchAthlete($league, $id, $athletesDir, $db) {
 
-	// fetch athelete info
+	// create athlete
 	//
-	$athlete = new NFLAthlete([
-		'id' => $id
-	]);
-	$athlete->fetch();
+	switch ($league) {
+		case 'NFL':
+			$athlete = new NFLAthlete([
+				'id' => $id
+			]);
+			break;
+		case 'NCAA':
+			$athlete = new NCAAAthlete([
+				'id' => $id
+			]);
+			break;
+	}
 	if (!$athlete) {
 		return;
 	}
+
+	// fetch athelete info
+	//
+	$athlete->fetch();
 
 	// find first letter of athlete's last name
 	//
@@ -106,12 +113,24 @@ function fetchNFLAthlete($id, $athletesDir, $db) {
 /**
  * Fetch all athletes and save them to the file system and database.
  *
+ * @param string $league - The league of the teams to fetch.
+ * @param string $leagueDir - The directory name of the league.
  * @param string $athletesDir - The directory name to save athelete data.
- * @param string $db - The database to store athelete data.
+ * @param object $db - The database to store athelete data.
  * @param int $start - The first athelete to save.
  */
-function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) { 
-	$athletes = json_decode(file_get_contents(NFLAthlete::$baseUrl));
+function fetchAthletes(string $league, string $leagueDir, string $athletesDir, $db, int $start = 0) { 
+	
+	// fetch teams
+	//
+	switch ($league) {
+		case 'NFL':
+			$athletes = json_decode(file_get_contents(NFLAthlete::$baseUrl));
+			break;
+		case 'NCAA':
+			$athletes = json_decode(file_get_contents(NCAAAthlete::$baseUrl));
+			break;
+	}
 	if (!$athletes) {
 		return;
 	}
@@ -157,7 +176,7 @@ function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) {
 
 							// fetch individual athlete by id
 							//
-							fetchNFLAthlete($id, $athletesDir, $db);
+							fetchAthlete($league, $id, $athletesDir, $db);
 						}
 					}
 				}
@@ -170,4 +189,21 @@ function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) {
 // main
 //
 
-fetchNFLAthletes($leagueDir, $athletesDir, $db, $start);
+// check command line arguments
+//
+if (count($argv) < 2) {
+	echo "Usage: php fetch_athletes.php <LEAGUE> \n";
+	echo "Leagues: NFL, NCAA \n";
+	exit();
+}
+
+// parse league
+//
+$league = $argv[1];
+$leagueDir = '../' . $league;
+$athletesDir = $leagueDir . '/Athletes';
+$start = 0;
+
+// fetch all athletes in league
+//
+fetchAthletes($league, $leagueDir, $athletesDir, $db, $start);

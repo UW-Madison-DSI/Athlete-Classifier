@@ -59,22 +59,22 @@ Scripts are provided for fetching and processing both athletes and teams:
 
 ### 1. Athletes
 
-These scripts fetch and categorize player data and headshots. Since there are  many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset includes about 12,000 players with headshots is over 3GB in size. The NCAA dataset includes about 200,000 players.
+The script 'fetch_athletes.php' fetches and categorizes player data and headshots. Since there are  many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset includes about 12,000 players with headshots is over 3GB in size. The NCAA dataset includes about 200,000 players.
 
 ```
 cd src
-php fetch_nfl_athletes.php
-php fetch_ncaa_athletes.php
+php fetch_athletes.php NFL
+php fetch_athletes.php NCAA
 ```
 
 ### 2. Teams
 
-These scripts 'fetch_teams.php' script fetches team data and logos.
+The script 'fetch_teams.php' fetches team data and logos.
 
 ```
 cd src
-php fetch_nfl_teams.php
-php fetch_ncaa_teams.php
+php fetch_teams.php NFL
+php fetch_teams.php NCAA
 ```
 
 ## Data

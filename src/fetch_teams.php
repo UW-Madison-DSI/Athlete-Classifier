@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                                fetch_team.php                                |
+|                                fetch_teams.php                               |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NCAA teams.                        |
+|        This defines a utility for fetching NFL teams.                        |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,15 +16,9 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
+include "models/nfl/nfl_team.php";
 include "models/ncaa/ncaa_team.php";
 include 'utilities/database.php';
-
-//
-// variables
-//
-
-$leagueDir = '../NCAA';
-$teamsDir = $leagueDir . '/Teams';
 
 //
 // methods
@@ -33,18 +27,34 @@ $teamsDir = $leagueDir . '/Teams';
 /**
  * Fetch a team and save it to the file system and database.
  *
- * @param  integer $id - The id of the team to fetch.
+ * @param  string $league - The league of the team to fetch.
+ * @param  string $id - The id of the team to fetch.
  * @param  string $teamsDir - The directory name to save team data.
  * @param  object $db - The database to store team data.
  * @return App\Models\Team
  */
-function fetchNCAATeam($id, $teamsDir, $db) { 
+function fetchTeam(string $league, string $id, string $teamsDir, $db) { 
+
+	// create team
+	//
+	switch ($league) {
+		case 'NFL':
+			$team = new NFLTeam([
+				'id' => $id
+			]);
+			break;
+		case 'NCAA':
+			$team = new NCAATeam([
+				'id' => $id
+			]);
+			break;
+	}
+	if (!$team) {
+		return;
+	}
 
 	// fetch team
 	//
-	$team = new NCAATeam([
-		'id' => $id
-	]);
 	$team->fetch();
 
 	// save team to storage
@@ -63,15 +73,24 @@ function fetchNCAATeam($id, $teamsDir, $db) {
 /**
  * Fetch all teams and save them to the file system and database.
  *
- * @param  integer $id - The id of the athelete to fetch.
- * @param  string $teamsDir - The directory name to save athelete data.
+ * @param string $league - The league of the teams to fetch.
+ * @param string $leagueDir - The directory name of the league.
+ * @param string $teamsDir - The directory name to save teams data.
+ * @param object $db - The database to store teams data.
  * @return App\Models\Athlete
  */
-function fetchNCAATeams($leagueDir, $teamsDir, $db) { 
+function fetchTeams(string $league, string $leagueDir, string $teamsDir, $db) { 
 
 	// fetch teams
 	//
-	$teams = json_decode(file_get_contents(NCAATeam::$baseUrl . '?limit=1000'));
+	switch ($league) {
+		case 'NFL':
+			$teams = json_decode(file_get_contents(NFLTeam::$baseUrl . '?limit=1000'));
+			break;
+		case 'NCAA':
+			$teams = json_decode(file_get_contents(NCAATeam::$baseUrl . '?limit=1000'));
+			break;
+	}
 	if (!$teams) {
 		return;
 	}
@@ -104,7 +123,7 @@ function fetchNCAATeams($leagueDir, $teamsDir, $db) {
 
 		// fetch individual team by id
 		//
-		fetchNCAATeam($id, $teamsDir, $db);
+		fetchTeam($league, $id, $teamsDir, $db);
 	}
 }
 
@@ -112,4 +131,20 @@ function fetchNCAATeams($leagueDir, $teamsDir, $db) {
 // main
 //
 
-fetchNCAATeams($leagueDir, $teamsDir, $db);
+// check command line arguments
+//
+if (count($argv) < 2) {
+	echo "Usage: php fetch_teams.php <LEAGUE> \n";
+	echo "Leagues: NFL, NCAA \n";
+	exit();
+}
+
+// parse league
+//
+$league = $argv[1];
+$leagueDir = '../' . $league;
+$teamsDir = $leagueDir . '/Teams';
+
+// fetch all teams in league
+//
+fetchTeams($league, $leagueDir, $teamsDir, $db);

@@ -16,7 +16,7 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/team.php";
+include_once "models/team.php";
 
 class NCAATeam extends Team {
 

@@ -16,8 +16,8 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "config.php";
-include "models/model.php";
+include_once "config.php";
+include_once "models/model.php";
 
 abstract class Team extends Model {
 
