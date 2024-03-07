@@ -51,7 +51,8 @@ abstract class Model {
 	 * @return boolean
 	 */
 	public function has(string $attribute) {	
-		return property_exists($this->attributes, $attribute);	
+		return property_exists($this->attributes, $attribute);
+		// return array_key_exists($attribute, $this->attributes);	
 	}
 
 	/**
@@ -64,6 +65,7 @@ abstract class Model {
 			return;
 		}
 		return get_object_vars($this->attributes)[$attribute];
+		// return $this->attributes[$attribute];
 	}
 
 	//

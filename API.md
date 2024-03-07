@@ -44,7 +44,7 @@ This route is used to get a list of teams.
 
 | Method | Route |
 | ------ | ------|
-| GET    | {Base URL}/sports/football/leagues/{LEAGUE}/seasons/{YEAR}/teams |
+| GET    | {League URL}/seasons/{YEAR}/teams |
 
 Examples: 
 
@@ -59,7 +59,7 @@ This route is used to get a specific team.
 
 | Method | Route |
 | ------ | ------|
-| GET    | {Base URL}/sports/football/leagues/{LEAGUE}/seasons/{YEAR}/teams/{ID} |
+| GET    | {League URL}/seasons/{YEAR}/teams/{ID} |
 
 Examples: 
 
@@ -68,13 +68,29 @@ http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/team
 - NCAA:
 http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/2
 
-## 4. GET Athletes
+
+## 4. GET Team Athletes
+
+This route is used to get all of the athletes within a team.
+
+| Method | Route |
+| ------ | ------|
+| GET    | {League URL}/seasons/{YEAR}/teams/{ID}/athletes?limit={LIMIT} |
+
+Examples:
+- NFL:
+https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/1/athletes?limit=1000
+- NCAA: https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/teams/2/athletes?limit=1000
+
+
+
+## 5. GET Athletes
 
 This route is used to get a list of athletes.
 
 | Method | Route |
 | ------ | ------|
-| GET    | {Base URL}/sports/football/leagues/{LEAGUE}/athletes?page={PAGE} |
+| GET    | {League URL}/athletes?page={PAGE} |
 
 Examples:
 
@@ -83,13 +99,13 @@ https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes?page=1
 - NCAA:
 https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes?page=1
 
-## 5. GET Athlete
+## 6. GET Athlete
 
 This route is used to get a particular athlete.
 
 | Method | Route |
 | ------ | ------|
-| GET    | {Base URL}/sports/football/leagues/{LEAGUE}/athletes/{ID} |
+| GET    | {League URL}/athletes/{ID} |
 
 Examples: 
 
@@ -98,7 +114,7 @@ http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4678
 - NCAA:
 https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/athletes/4697420
 
-## 6. GET Athlete Headshot
+## 7. GET Athlete Headshot
 
 This route is used to get a particular athlete's headshot.
 

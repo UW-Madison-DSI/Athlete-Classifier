@@ -18,14 +18,32 @@
 
 include_once "config.php";
 include_once "models/model.php";
+include_once "models/league.php";
 
-abstract class Team extends Model {
+class Team extends Model {
 
 	//
 	// attributes
 	//
 
-	public static $table = 'teams';
+	public $league = NULL;
+	public $id = NULL;
+	public $year = NULL;
+
+	/**
+	 * Create a new model.
+	 *
+	 * @param $attributes[]
+	 * @return Team
+	 */
+	function __construct(array $attributes) {
+
+		// set attributes
+		//
+		$this->league = $attributes['league'];
+		$this->id = $attributes['id'];
+		$this->year = $attributes['year'];
+	}
 
 	//
 	// querying methods
@@ -36,8 +54,17 @@ abstract class Team extends Model {
 	 *
 	 * @return string
 	 */
+	public static function baseUrl($league, $year) {
+		return League::baseUrl($league) . '/seasons/' . $year . '/teams';
+	}
+
+	/**
+	 * Get this team's url.
+	 *
+	 * @return string
+	 */
 	public function url() {
-		return $this->baseUrl() . '/' . $this->attributes['id'];
+		return self::baseUrl($this->league, $this->year) . '/' . $this->id;
 	}
 
 	/**
@@ -46,7 +73,7 @@ abstract class Team extends Model {
 	 * @return string
 	 */
 	public function table() {
-		return self::$table;
+		return strtolower($this->league) . '_teams';
 	}
 
 	//
