@@ -9,7 +9,7 @@
 
 # Athlete Categorizer
 
-The Athlete Categorizer is a simple utility for downloading, organizing, and categorizing NFL and NCAA athelete data using the ESPN API.  It can be used to perform various types of analysis of player data, including ethnographic analysis.
+The Athlete Categorizer is a simple utility for downloading, organizing, and categorizing NFL and NCAA athelete data using the [ESPN API](API.md).  It can be used to perform various types of analysis of player data, including ethnographic analysis.
 
 The utility performs the following functions:
 
