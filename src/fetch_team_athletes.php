@@ -79,6 +79,10 @@ function fetchTeamAthlete($league, $id, $athletesDir, $db) {
 	//
 	$athlete->storeDemographics($db, $athleteDir);
 
+	// save athlete skin tones in file system
+	//
+	$athlete->saveSkinTone($athleteDir);
+
 	// return new athlete
 	//
 	return $athlete;

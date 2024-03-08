@@ -148,6 +148,24 @@ class Athlete extends Model {
 	}
 
 	/**
+	 * Save this athlete's demographic data to a directory.
+	 *
+	 * @param string $dirname - the name of the directory to save to.
+	 */
+	public function saveSkinTone(string $dirname = '') {
+		echo "analyzing skin tone of " . $this->get('fullName') . "\n";
+
+		// get image path
+		//
+		$imagepath = ($dirname? $dirname . '/' : '') . $this->getImageName();
+
+		// run classifier
+		//
+		$command = "python3 skin_tone.py " . '"' . $imagepath . '"';
+		shell_exec($command);
+	}
+
+	/**
 	 * Store this athlete's demographic data to a database.
 	 *
 	 * @param object $db - the database to store to.
