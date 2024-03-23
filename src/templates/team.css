@@ -76,14 +76,15 @@ body {
 	}
 
 	.info {
-		text-align: center;
 		line-height: 25px;
+		text-align: left;
 
 		> div {
 			height: 30px;
 		}
 
 		.name {
+			text-align: center;
 			padding: 0 10px;
 			line-height: 26px;
 			font-weight: bold;
@@ -93,7 +94,6 @@ body {
 
 		.label {
 			font-size: 100%;
-			margin: 20px;
 		}
 
 		.value {
