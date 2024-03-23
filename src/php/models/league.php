@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                               nfl_athlete.php                                |
+|                                  league.php                                  |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a class for fetching, storing, and saving athletes.      |
+|        This defines a class for fetching, storing, and saving leagues.       |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,36 +16,26 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/athlete.php";
+include_once "config.php";
 
-class NFLAthlete extends Athlete {
-
-	//
-	// attributes
-	//
-
-	public static $table = 'nfl_athletes';
-	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/nfl/athletes';
+class League extends Model {
 
 	//
-	// methods
+	// querying methods
 	//
 
 	/**
-	 * Get this athlete's database table.
+	 * Get this league's url.
 	 *
 	 * @return string
 	 */
-	public function table() {
-		return self::$table;
-	}
+	public static function baseUrl($name) {
+		switch ($name) {
+			case 'NFL':
+				return ESPN_API_URL . '/sports/football/leagues/nfl';
+			case 'NCAA':
+				return ESPN_API_URL . '/sports/football/leagues/college-football';
 
-	/**
-	 * Get this team's base url.
-	 *
-	 * @return string
-	 */
-	public function baseUrl() {
-		return self::$baseUrl;
+		}
 	}
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html> 
+<html lang="en">
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" type="text/css" href="../../vendor/fancybox/jquery.fancybox.css" />
+		<link rel="stylesheet" type="text/css" href="../../vendor/bootstrap/css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+	</head>
+	<body>
+		<!-- lightbox scripts -->
+		<script type="text/javascript" src="../../lib/jquery/jquery-3.6.0.js"></script>
+		<script type="text/javascript" src="../../vendor/fancybox/jquery.fancybox.js"></script>
+		<script type="text/javascript" src="../../vendor/bootstrap/js/tooltip.js"></script>
+		<script>
+			$(document).ready(() => {
+
+				// add lightbox triggers
+				//
+				$('.lightbox').fancybox({
+
+					// options
+					//
+					openEffect: 'elastic',
+					closeEffect: 'elastic',
+					type : "image"
+				});
+
+				// add tooltip triggers
+				//
+				$('[data-toggle="tooltip"]').tooltip({
+					trigger: 'hover'
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="logo" style="background-image:url('<%= logo %>')"></div>
+		<h1><%= title %></h1>
+<%= items %>
+	</body>
+</html>

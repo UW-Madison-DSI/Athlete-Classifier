@@ -12,10 +12,10 @@
 #     Copyright (C) 2024, Data Science Institute, University of Wisconsin      #
 ################################################################################
 
-from deepface import DeepFace
 import sys
 import json
 import pathlib
+from deepface import DeepFace
 
 # get command line arguments
 filename = sys.argv[1]

@@ -5,7 +5,7 @@
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NCAA teams.                        |
+|        This is a utility for fetching, storing, and saving a team.           |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,15 +16,8 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/ncaa/ncaa_team.php";
+include "models/team.php";
 include 'utilities/database.php';
-
-//
-// variables
-//
-
-$leagueDir = '../NCAA';
-$teamsDir = $leagueDir . '/Teams';
 
 //
 // methods
@@ -33,18 +26,25 @@ $teamsDir = $leagueDir . '/Teams';
 /**
  * Fetch a team and save it to the file system and database.
  *
- * @param  integer $id - The id of the team to fetch.
- * @param  string $teamsDir - The directory name to save team data.
- * @param  object $db - The database to store team data.
+ * @param string $league - The league of the team to fetch.
+ * @param string $id - The id of the team to fetch.
+ * @param int $year - The year of the team to fetch.
+ * @param string $teamsDir - The directory name to save team data.
+ * @param object $db - The database to store team data.
  * @return App\Models\Team
  */
-function fetchNCAATeam($id, $teamsDir, $db) { 
+function fetchTeam(string $league, string $id, int $year, string $teamsDir, $db) { 
+
+	// create team
+	//
+	$team = new Team([
+		'league' => $league,
+		'id' => $id,
+		'year' => $year
+	]);
 
 	// fetch team
 	//
-	$team = new NCAATeam([
-		'id' => $id
-	]);
 	$team->fetch();
 
 	// save team to storage
@@ -60,56 +60,49 @@ function fetchNCAATeam($id, $teamsDir, $db) {
 	return $team;
 }
 
-/**
- * Fetch all teams and save them to the file system and database.
- *
- * @param  integer $id - The id of the athelete to fetch.
- * @param  string $teamsDir - The directory name to save athelete data.
- * @return App\Models\Athlete
- */
-function fetchNCAATeams($leagueDir, $teamsDir, $db) { 
-
-	// fetch teams
-	//
-	$teams = json_decode(file_get_contents(NCAATeam::$baseUrl . '?limit=1000'));
-	if (!$teams) {
-		return;
-	}
-
-	// ouput team metadata
-	//
-	echo "teams count = " . $teams->count . "\n";
-
-	// create new league directory
-	//
-	if (!file_exists($leagueDir)) {
-		mkdir($leagueDir);
-	}
-
-	// create new teams directory
-	//
-	if (!file_exists($teamsDir)) {
-		mkdir($teamsDir);
-	}
-
-	// iterate over teams
-	//
-	for ($i = 0; $i < count($teams->items); $i++) {
-		$item = $teams->items[$i];
-
-		// parse team id from ref
-		//
-		$ref = $item->{'$ref'};
-		$id = basename(substr($ref, 0, strpos($ref, "?")));
-
-		// fetch individual team by id
-		//
-		fetchNCAATeam($id, $teamsDir, $db);
-	}
-}
-
 //
 // main
 //
 
-fetchNCAATeams($leagueDir, $teamsDir, $db);
+// check command line arguments
+//
+if (count($argv) < 3) {
+	echo "Usage: php fetch_team.php <LEAGUE> <TEAMID> [<YEAR>]\n";
+	echo "Leagues: NFL, NCAA \n";
+	exit();
+}
+
+// parse league
+//
+$league = $argv[1];
+$leagueDir = '../../data/' . $league;
+
+// parse team id
+//
+$teamId = intval($argv[2]);
+
+// parse year
+//
+if (count($argv) >= 4) {
+	$year = intval($argv[3]);
+} else {
+	$year = date("Y");
+}
+
+// create new league directory
+//
+if (!file_exists($leagueDir)) {
+	mkdir($leagueDir);
+}
+
+// create new teams directory
+//
+$teamsDir = $leagueDir . '/Teams';
+if (!file_exists($teamsDir)) {
+	mkdir($teamsDir);
+}
+
+// fetch team by id
+//
+echo "Fetching " . $league . " team " . $teamId . " from " . $year . ".\n";
+fetchTeam($league, $teamId, $year, $teamsDir, $db);

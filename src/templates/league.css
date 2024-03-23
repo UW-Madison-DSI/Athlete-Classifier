@@ -1,11 +1,10 @@
-<?php
 /******************************************************************************\
 |                                                                              |
-|                               ncaa_team.php                                  |
+|                                   league.css                                 |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a class for fetching, storing, and saving teams.         |
+|        This defines various CSS styles used in this application.             |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,36 +15,71 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/team.php";
+body {
+	font-family: Arial;
+	text-align: center;
+	background-color: black;
+	color: white;
+	padding: 50px 0;
+}
 
-class NCAATeam extends Team {
+.logo {
+	width: 150px;
+	height: 150px;
+	background-size: cover;
+	background-position: center;	
+	margin: auto;
+	background-color: white;
+	border-radius: 20px;
+}
 
-	//
-	// attributes
-	//
+@keyframes growing-bounce-keyframes {
+	0% {
+		transform: scale(1);
+	}
+	33% {
+		transform: scale(1.05);
+	}
+	66% {
+		transform: scale(0.95);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
 
-	public static $table = 'ncaa_teams';
-	public static $baseUrl = ESPN_API_URL . '/sports/football/leagues/college-football/seasons/2024/teams';
+.team {
+	display: inline-block;
+	margin: 25px;
+	margin-bottom: 50px;
 
-	//
-	// methods
-	//
+	.thumbnail {
+		width: 200px;
+		height: 200px;
+		background-size: cover;
+		background-position: center;
+		background-color: white;
+		border-radius: 20px;
 
-	/**
-	 * Get this team's database table.
-	 *
-	 * @return string
-	 */
-	public function table() {
-		return self::$table;
+		&:hover {
+			animation: growing-bounce-keyframes 0.3s ease-in-out;
+		}
 	}
 
-	/**
-	 * Get this team's base url.
-	 *
-	 * @return string
-	 */
-	public function baseUrl() {
-		return self::$baseUrl;
+	.info {
+		text-align: center;
+		line-height: 25px;
+
+		> div {
+			height: 30px;
+		}
+
+		.name {
+			padding: 0 10px;
+			line-height: 30px;
+			border-radius: 20px;
+			border: 2px solid white;
+			margin: 20px;
+		}
 	}
 }

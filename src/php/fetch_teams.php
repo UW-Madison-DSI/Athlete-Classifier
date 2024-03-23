@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                                fetch_team.php                                |
+|                                fetch_teams.php                               |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NFL teams.                        |
+|        This is a utility for fetching, storing, and saving teams.            |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,15 +16,8 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/nfl/nfl_team.php";
+include "models/team.php";
 include 'utilities/database.php';
-
-//
-// variables
-//
-
-$leagueDir = '../NFL';
-$teamsDir = $leagueDir . '/Teams';
 
 //
 // methods
@@ -33,18 +26,25 @@ $teamsDir = $leagueDir . '/Teams';
 /**
  * Fetch a team and save it to the file system and database.
  *
- * @param  integer $id - The id of the team to fetch.
- * @param  string $teamsDir - The directory name to save team data.
- * @param  object $db - The database to store team data.
+ * @param string $league - The league of the team to fetch.
+ * @param string $id - The id of the team to fetch.
+ * @param int $year - The year of the team to fetch.
+ * @param string $teamsDir - The directory name to save team data.
+ * @param object $db - The database to store team data.
  * @return App\Models\Team
  */
-function fetchNFLTeam($id, $teamsDir, $db) { 
+function fetchTeam(string $league, string $id, int $year, string $teamsDir, $db) { 
+
+	// create team
+	//
+	$team = new Team([
+		'league' => $league,
+		'id' => $id,
+		'year' => $year
+	]);
 
 	// fetch team
 	//
-	$team = new NFLTeam([
-		'id' => $id
-	]);
 	$team->fetch();
 
 	// save team to storage
@@ -63,15 +63,24 @@ function fetchNFLTeam($id, $teamsDir, $db) {
 /**
  * Fetch all teams and save them to the file system and database.
  *
- * @param  integer $id - The id of the athelete to fetch.
- * @param  string $teamsDir - The directory name to save athelete data.
+ * @param string $league - The league of the teams to fetch.
+ * @param string $year - The year of the teams to fetch.
+ * @param string $teamsDir - The directory name to save teams data.
+ * @param object $db - The database to store teams data.
  * @return App\Models\Athlete
  */
-function fetchNFLTeams($leagueDir, $teamsDir, $db) { 
+function fetchTeams(string $league, int $year, string $teamsDir, $db) { 
 
 	// fetch teams
 	//
-	$teams = json_decode(file_get_contents(NFLTeam::$baseUrl . '?limit=1000'));
+	switch ($league) {
+		case 'NFL':
+			$teams = json_decode(file_get_contents(Team::baseUrl($league, $year) . '?limit=1000'));
+			break;
+		case 'NCAA':
+			$teams = json_decode(file_get_contents(Team::baseUrl($league, $year) . '?limit=1000'));
+			break;
+	}
 	if (!$teams) {
 		return;
 	}
@@ -79,18 +88,6 @@ function fetchNFLTeams($leagueDir, $teamsDir, $db) {
 	// ouput team metadata
 	//
 	echo "teams count = " . $teams->count . "\n";
-
-	// create new league directory
-	//
-	if (!file_exists($leagueDir)) {
-		mkdir($leagueDir);
-	}
-
-	// create new teams directory
-	//
-	if (!file_exists($teamsDir)) {
-		mkdir($teamsDir);
-	}
 
 	// iterate over teams
 	//
@@ -104,7 +101,7 @@ function fetchNFLTeams($leagueDir, $teamsDir, $db) {
 
 		// fetch individual team by id
 		//
-		fetchNFLTeam($id, $teamsDir, $db);
+		fetchTeam($league, $id, $year, $teamsDir, $db);
 	}
 }
 
@@ -112,4 +109,41 @@ function fetchNFLTeams($leagueDir, $teamsDir, $db) {
 // main
 //
 
-fetchNFLTeams($leagueDir, $teamsDir, $db);
+// check command line arguments
+//
+if (count($argv) < 2) {
+	echo "Usage: php fetch_teams.php <LEAGUE> [<YEAR>]\n";
+	echo "Leagues: NFL, NCAA \n";
+	exit();
+}
+
+// parse league
+//
+$league = $argv[1];
+$leagueDir = '../../data/' . $league;
+
+// parse year
+//
+if (count($argv) >= 3) {
+	$year = intval($argv[2]);
+} else {
+	$year = date("Y");
+}
+
+// create new league directory
+//
+if (!file_exists($leagueDir)) {
+	mkdir($leagueDir);
+}
+
+// create new teams directory
+//
+$teamsDir = $leagueDir . '/Teams';
+if (!file_exists($teamsDir)) {
+	mkdir($teamsDir);
+}
+
+// fetch all teams in league
+//
+echo "Fetching " . $league . " teams from " . $year . ".\n";
+fetchTeams($league, $year, $teamsDir, $db);

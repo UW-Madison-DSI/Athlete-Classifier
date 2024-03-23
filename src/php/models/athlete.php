@@ -16,20 +16,45 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "config.php";
-include "models/model.php";
+include_once "config.php";
+include_once "models/model.php";
+include_once "models/league.php";
 
-abstract class Athlete extends Model {
+class Athlete extends Model {
 
 	//
 	// attributes
 	//
 
-	public static $table = 'athletes';
+	public $league = NULL;
+	public $id = NULL;
+
+	/**
+	 * Create a new model.
+	 *
+	 * @param $attributes[]
+	 * @return Team
+	 */
+	function __construct(array $attributes) {
+
+		// set attributes
+		//
+		$this->league = $attributes['league'];
+		$this->id = $attributes['id'];
+	}
 
 	//
 	// querying methods
 	//
+
+	/**
+	 * Get this athlete's base url.
+	 *
+	 * @return string
+	 */
+	public static function baseUrl($league) {
+		return League::baseUrl($league) . '/athletes';
+	}
 
 	/**
 	 * Get this athlete's url.
@@ -37,16 +62,16 @@ abstract class Athlete extends Model {
 	 * @return string
 	 */
 	public function url() {
-		return $this->baseUrl() . '/' . $this->attributes['id'];
+		return self::baseUrl($this->league) . '/' . $this->id;
 	}
 
 	/**
-	 * Get this athlete's database table.
+	 * Get this athletes's database table.
 	 *
 	 * @return string
 	 */
 	public function table() {
-		return self::$table;
+		return strtolower($this->league) . '_athletes';
 	}
 
 	/**
@@ -119,6 +144,24 @@ abstract class Athlete extends Model {
 		// run classifier
 		//
 		$command = "python3 classify.py " . '"' . $imagepath . '"';
+		shell_exec($command);
+	}
+
+	/**
+	 * Save this athlete's demographic data to a directory.
+	 *
+	 * @param string $dirname - the name of the directory to save to.
+	 */
+	public function saveSkinTone(string $dirname = '') {
+		echo "analyzing skin tone of " . $this->get('fullName') . "\n";
+
+		// get image path
+		//
+		$imagepath = ($dirname? $dirname . '/' : '') . $this->getImageName();
+
+		// run classifier
+		//
+		$command = "python3 skin_tone.py " . '"' . $imagepath . '"';
 		shell_exec($command);
 	}
 

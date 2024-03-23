@@ -7,9 +7,11 @@
   </div>
 </p>
 
-# Athlete Categorizer
+# Athlete Classifier
 
-The Athlete Categorizer is a simple utility for downloading, organizing, and categorizing NFL and NCAA athelete data using the [ESPN API](API.md).  It can be used to perform various types of analysis of player data, including ethnographic analysis.
+The Athlete Classifier is a simple utility for downloading, organizing, and classifying NFL and NCAA athelete data using the [ESPN API](API.md).  It can be used to perform various types of analysis of player data, including ethnographic analysis.
+
+![Screen Shot](images/badgers.png)
 
 The utility performs the following functions:
 
@@ -19,8 +21,8 @@ The utility downloads the data using the ESPN API and organizes the JSON and ima
 ### 2. Indexing
 While downloading the data, the utility stores it into a relational database for easy querying and analysis. 
 
-### 3. Categorizing
-The utility performs an ethnographic / demographic categorization of players based upon their headshots.
+### 3. Classifying
+The utility performs an ethnographic / demographic classification of players based upon their headshots.
 
 ## Requirements
 
@@ -31,7 +33,7 @@ The utility relies upon the PHP and Python scripting languages.
 The data is stored in a SQL database for easy querying and analysis.  You will need MySQL, MariaDB, or an equivalent.
 
 ### 3. DeepFace
-The [DeepFace](https://github.com/serengil/deepface) utility is used to perform an image based ethnographic / demographic categorization of players.
+The [DeepFace](https://github.com/serengil/deepface) utility is used to perform an image based ethnographic / demographic classification of players.
 
 ## Installation
 
@@ -59,22 +61,22 @@ Scripts are provided for fetching and processing both athletes and teams:
 
 ### 1. Athletes
 
-These scripts fetch and categorize player data and headshots. Since there are  many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset includes about 12,000 players with headshots is over 3GB in size. The NCAA dataset includes about 200,000 players.
+The script 'fetch_athletes.php' fetches and classifies player data and headshots. Since there are  many thousands of players in the database, they are divided up into folders based upon the first letter of the player's last name.  The complete NFL dataset includes about 12,000 players with headshots is over 3GB in size. The NCAA dataset includes about 200,000 players.
 
 ```
 cd src
-php fetch_nfl_athletes.php
-php fetch_ncaa_athletes.php
+php fetch_athletes.php NFL
+php fetch_athletes.php NCAA
 ```
 
 ### 2. Teams
 
-These scripts 'fetch_teams.php' script fetches team data and logos.
+The script 'fetch_teams.php' fetches team data and logos.
 
 ```
 cd src
-php fetch_nfl_teams.php
-php fetch_ncaa_teams.php
+php fetch_teams.php NFL
+php fetch_teams.php NCAA
 ```
 
 ## Data

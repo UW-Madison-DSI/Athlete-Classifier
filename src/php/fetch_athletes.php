@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                            fetch_nfl_athletes.php                            |
+|                              fetch_athletes.php                              |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
-|        This defines a utility for fetching NFL athletes.                     |
+|        This is a utility for fetching, storing, and saving athletes.         |
 |                                                                              |
 |        Author(s): Abe Megahed                                                |
 |                                                                              |
@@ -16,16 +16,8 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-include "models/nfl/nfl_athlete.php";
+include "models/athlete.php";
 include 'utilities/database.php';
-
-//
-// variables
-//
-
-$leagueDir = '../NFL';
-$athletesDir = $leagueDir . '/Athletes';
-$start = 0;
 
 //
 // methods
@@ -34,21 +26,24 @@ $start = 0;
 /**
  * Fetch an athlete and save it to the file system and database.
  *
+ * @param  string $league - The league of the athlete to fetch.
  * @param  integer $id - The id of the athelete to fetch.
  * @param  string $athletesDir - The directory name to save athelete data.
+ * @param  object $db - The database to store athlete data.
  * @return App\Models\Athlete
  */
-function fetchNFLAthlete($id, $athletesDir, $db) {
+function fetchAthlete($league, $id, $athletesDir, $db) {
+
+	// create athlete
+	//
+	$athlete = new Athlete([
+		'league' => $league,
+		'id' => $id
+	]);
 
 	// fetch athelete info
 	//
-	$athlete = new NFLAthlete([
-		'id' => $id
-	]);
 	$athlete->fetch();
-	if (!$athlete) {
-		return;
-	}
 
 	// find first letter of athlete's last name
 	//
@@ -106,12 +101,16 @@ function fetchNFLAthlete($id, $athletesDir, $db) {
 /**
  * Fetch all athletes and save them to the file system and database.
  *
+ * @param string $league - The league of the teams to fetch.
  * @param string $athletesDir - The directory name to save athelete data.
- * @param string $db - The database to store athelete data.
+ * @param object $db - The database to store athelete data.
  * @param int $start - The first athelete to save.
  */
-function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) { 
-	$athletes = json_decode(file_get_contents(NFLAthlete::$baseUrl));
+function fetchAthletes(string $league, string $athletesDir, $db, int $start = 0) { 
+
+	// fetch athletes
+	//
+	$athletes = json_decode(file_get_contents(Athlete::baseUrl($league)));
 	if (!$athletes) {
 		return;
 	}
@@ -122,24 +121,12 @@ function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) {
 	echo "page size = " . $athletes->pageSize . "\n";
 	echo "page count = " . $athletes->pageCount . "\n";
 
-	// create new league directory
-	//
-	if (!file_exists($leagueDir)) {
-		mkdir($leagueDir);
-	}
-
-	// create new athletes directory
-	//
-	if (!file_exists($athletesDir)) {
-		mkdir($athletesDir);
-	}
-
 	// iterate over athlete pages
 	//
 	for ($i = 0; $i < $athletes->pageCount; $i++) {
 		$index = ($i * $athletes->pageSize);
 		if ($index >= $start) {
-			$data = json_decode(file_get_contents(NFLAthlete::$baseUrl . '?page=' . $i));
+			$data = json_decode(file_get_contents(Athlete::baseUrl($league) . '?page=' . $i));
 			if ($data) {
 				for ($j = 0; $j < count($data->items); $j++) {
 					$index = ($i * $athletes->pageSize) + $j;
@@ -157,7 +144,7 @@ function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) {
 
 							// fetch individual athlete by id
 							//
-							fetchNFLAthlete($id, $athletesDir, $db);
+							fetchAthlete($league, $id, $athletesDir, $db);
 						}
 					}
 				}
@@ -170,4 +157,34 @@ function fetchNFLAthletes($leagueDir, $athletesDir, $db, $start = 0) {
 // main
 //
 
-fetchNFLAthletes($leagueDir, $athletesDir, $db, $start);
+// check command line arguments
+//
+if (count($argv) < 2) {
+	echo "Usage: php fetch_athletes.php <LEAGUE> \n";
+	echo "Leagues: NFL, NCAA \n";
+	exit();
+}
+
+// parse league
+//
+$league = $argv[1];
+$leagueDir = '../../data/' . $league;
+
+// create new league directory
+//
+if (!file_exists($leagueDir)) {
+	mkdir($leagueDir);
+}
+
+// create new athletes directory
+//
+$athletesDir = $leagueDir . '/Athletes';
+if (!file_exists($athletesDir)) {
+	mkdir($athletesDir);
+}
+
+// fetch all athletes in league
+//
+$start = 0;
+echo "Fetching " . $league . " athletes.\n";
+fetchAthletes($league, $athletesDir, $db, $start);
