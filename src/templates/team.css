@@ -75,6 +75,7 @@ body {
 
 	.info {
 		text-align: center;
+		line-height: 25px;
 
 		> div {
 			height: 30px;
@@ -85,15 +86,11 @@ body {
 			line-height: 30px;
 			border-radius: 20px;
 			border: 2px solid white;
-			margin: 20px 0;
-			line-height: 26px;
-			height: 30px;
-			font-weight: bold;
 		}
 
 		.label {
 			font-size: 100%;
-			float: left;
+			margin: 20px;
 		}
 
 		.value {

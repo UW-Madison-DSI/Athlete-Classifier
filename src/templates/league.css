@@ -28,9 +28,13 @@ body {
 	height: 150px;
 	background-size: cover;
 	background-position: center;	
+<<<<<<< HEAD
 	margin: auto;
 	background-color: white;
 	border-radius: 20px;
+=======
+	margin: auto;	
+>>>>>>> a03d1f398e7200bc0e80b3aaeb9cf0c8e557e26d
 }
 
 @keyframes growing-bounce-keyframes {
@@ -58,8 +62,11 @@ body {
 		height: 200px;
 		background-size: cover;
 		background-position: center;
+<<<<<<< HEAD
 		background-color: white;
 		border-radius: 20px;
+=======
+>>>>>>> a03d1f398e7200bc0e80b3aaeb9cf0c8e557e26d
 
 		&:hover {
 			animation: growing-bounce-keyframes 0.3s ease-in-out;

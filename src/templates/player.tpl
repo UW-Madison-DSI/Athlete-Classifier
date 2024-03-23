@@ -3,6 +3,7 @@
 			<a href="<%= src %>" target="_blank" class="lightbox" title="<%= name %>">
 				<div class="thumbnail" style="background-image:url('<%= src %>')"></div>
 			</a>
+			<div class="thumbnail" style="background-image:url('<%= src %>')"></div>
 			
 			<div class="info">
 				<div class="name"><%= name %></div>
