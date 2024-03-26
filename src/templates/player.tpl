@@ -1,13 +1,17 @@
 		<div class="player">
 
-			<a href="<%= src %>" target="_blank" class="lightbox" title="<%= name %>">
-				<div class="thumbnail" style="background-image:url('<%= src %>')"></div>
+			<a href="<%= href %>" target="_blank" class="lightbox" title="<%= name %>">
+				<div class="thumbnail" style="background-image:url('<%= icon %>')"></div>
 			</a>
-			
+
 			<div class="info">
 				<div class="name"><%= name %></div>
 
 				<br />
+
+				<a href="<%= report %>" target="_blank" class="lightbox" title="<%= name %> Skin Tone Report">
+					<img class="report" src="<%= report %>" />
+				</a>
 
 				<div class="skin-tone color">
 					<div class="label">Skin Tone</div>

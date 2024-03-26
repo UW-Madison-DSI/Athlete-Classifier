@@ -168,11 +168,7 @@ if (count($argv) < 2) {
 // parse league
 //
 $league = $argv[1];
-<<<<<<<< HEAD:src/php/fetch_athletes.php
 $leagueDir = '../../data/' . $league;
-========
-$leagueDir = '../' . $league;
->>>>>>>> a03d1f398e7200bc0e80b3aaeb9cf0c8e557e26d:src/fetch_athletes.php
 
 // create new league directory
 //

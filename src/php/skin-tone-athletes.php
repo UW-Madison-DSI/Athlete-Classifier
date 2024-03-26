@@ -22,15 +22,22 @@
 
 function skinToneDirectory($directory) {
 	$html = '';
+	$basename = basename($directory);
 
-	// iterate over all teams
+	// iterate over all athletes
 	//
 	$iterator = new DirectoryIterator($directory);
 	foreach ($iterator as $file) {
 		if (!$file->isFile()) {
-			$path = $file->getPath() . '/' . $file->getFilename();
-			# echo "Analyzing skin tone of " . $path . "\n";
-			skinToneAthlete($path);
+			$pathname = $file->getPath();
+			$dirname = $file->getFilename();
+
+			# analyze athlete directory
+			#
+			if ($dirname != '.' && $dirname != '..' && $dirname != $basename) {
+				$path = $pathname . '/' . $dirname;
+				skinToneAthlete($path);
+			}
 		}
 	}
 
@@ -42,9 +49,11 @@ function skinToneAthlete($directory) {
 	foreach ($iterator as $file) {
 		if ($file->isFile()) {
 			$filename = $file->getFilename();
-			if (str_ends_with($filename, '.png')) {
+			if (str_ends_with($filename, '.png') &&
+				!str_ends_with($filename, 'Report.png') && 
+				!str_ends_with($filename, '(rgb).png')) {
 				$path = $file->getPath() . '/' . $file->getFilename();
-				echo "Analyzing skin tone of " . $file->getFilename() . "\n";
+				echo "Analyzing skin tone of athlete " . $file->getFilename() . "\n";
 
 				// run classifier
 				//
@@ -65,7 +74,7 @@ if (count($argv) != 2) {
 }
 
 $path = $argv[1];
-echo "Analyzing skin tone of " . $path . "\n";
+echo "Analyzing skin tones of " . $path . "\n";
 
 // create web page
 //

@@ -65,6 +65,7 @@ function webifyAthlete($athlete, $directory) {
 	// compute substitutions
 	//
 	$src = $athlete . '/' . $athlete . '.png';
+	$report = $athlete . '/' . $athlete . ' Report.png';
 
 	// compute skin tone info
 	//
@@ -108,8 +109,10 @@ function webifyAthlete($athlete, $directory) {
 	//
 	global $playerTemplate;
 	$html = $playerTemplate;
-	$html = str_replace('<%= src %>', str_replace("'", "\'", $src), $html);
+	$html = str_replace('<%= href %>', $src, $html);
+	$html = str_replace('<%= icon %>', str_replace("'", "\'", $src), $html);
 	$html = str_replace('<%= name %>', $athlete, $html);
+	$html = str_replace('<%= report %>', $report, $html);
 
 	// format skin tones
 	//

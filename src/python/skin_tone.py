@@ -18,6 +18,9 @@ import json
 import pathlib
 import stone
 from colormap import rgb2hex, rgb2hls, hls2rgb
+import numpy as np
+from PIL import Image
+import cv2
 
 # get command line arguments
 #
@@ -77,10 +80,31 @@ def darken(color, factor):
 
 def contrast(color, factor):
 	r, g, b = hex_to_rgb(color)
-	r = 127 + (r - 127) * factor;
-	g = 127 + (g - 127) * factor;
-	b = 127 + (b - 127) * factor;
+	r = 127 - ((127 - r) * factor);
+	g = 127 - ((127 - g) * factor);
+	b = 127 - ((127 - b) * factor);
 	return rgb2hex(int(r), int(g), int(b))
+
+#
+# image manipulation functions
+#
+
+def convert_rgba_to_rgb(filename, rgb_filename):
+	rgba_image = Image.open(filename)
+	rgb_image = rgba_image.convert('RGB')
+	rgba_pixels = np.array(rgba_image)
+	rgb_pixels = np.array(rgb_image)
+
+	# convert rgb values to white using alpha channel
+	#
+	if (len(rgba_pixels[0, 0]) > 3):
+		for y in range(0, rgb_image.size[0] - 1): 
+			for x in range(0, rgb_image.size[1] - 1):
+				if rgba_pixels[x, y][3] < 255:    # check alpha
+					rgb_pixels[x, y] = (255, 255, 255)
+
+	img = Image.fromarray(rgb_pixels, 'RGB')
+	img.save(rgb_filename)
 
 #
 # main
@@ -88,11 +112,10 @@ def contrast(color, factor):
 
 # adjust palette for lighting
 #
-for i in range(0, len(palette)):
-	palette[i] = darken(palette[i], 0.3)
-
-print("palette = ")
-print(palette)
+# for i in range(0, len(palette)):
+#	palette[i] = darken(contrast(palette[i], 0.5), 0.5)
+# print("palette = ")
+# print(palette)
 
 # set options
 #
@@ -101,9 +124,20 @@ other_args = [
 	'-l ' + ' '.join(labels)
 ]
 
+# decompose filename
+#
+tuple = os.path.splitext(filename)
+basename = tuple[0]
+extension = tuple[1]
+
+# convert image file to rgb (no alpha) version
+#
+rgb_filename = basename + ' (rgb)' + extension;
+convert_rgba_to_rgb(filename, rgb_filename)
+
 # process the image
 #
-result = stone.process(filename, 
+result = stone.process(rgb_filename, 
 	image_type = 'color',
 	tone_palette = palette,
 	tone_labels = labels,
@@ -114,19 +148,30 @@ result = stone.process(filename,
 	min_nbrs = 5,
 	min_size = (90, 90),
 	threshold = 0.15,
-	return_report_image = False
+	return_report_image = True
 )
 
 # show the report image
 #
 report_images = result.pop("report_images")  # obtain and remove the report image from the `result`
-face_id = 1
-# stone.show(report_images[face_id])
+
+# save (first) report image
+#
+keys = report_images.keys();
+key = list(keys)[0]
+report_image = report_images[key];
+report_image = cv2.cvtColor(report_image, cv2.COLOR_BGR2RGB)
+pixels = np.array(report_image)
+img = Image.fromarray(pixels, 'RGB')
+img.save(basename + ' Report.png')
+
+# show report image
+#
+# stone.show(report_image)
 
 # find name of output file
 #
-extension = pathlib.Path(filename).suffix
-outfilename = filename.replace(extension, ' Skin Tone.json')
+outfilename = basename + ' Skin Tone.json'
 
 # write skin tone analysis to file
 #

@@ -75,11 +75,7 @@ if (count($argv) < 3) {
 // parse league
 //
 $league = $argv[1];
-<<<<<<<< HEAD:src/php/fetch_team.php
 $leagueDir = '../../data/' . $league;
-========
-$leagueDir = '../' . $league;
->>>>>>>> a03d1f398e7200bc0e80b3aaeb9cf0c8e557e26d:src/fetch_team.php
 
 // parse team id
 //
@@ -106,11 +102,7 @@ if (!file_exists($teamsDir)) {
 	mkdir($teamsDir);
 }
 
-<<<<<<<< HEAD:src/php/fetch_team.php
 // fetch team by id
-========
-// fetch all teams in league
->>>>>>>> a03d1f398e7200bc0e80b3aaeb9cf0c8e557e26d:src/fetch_team.php
 //
 echo "Fetching " . $league . " team " . $teamId . " from " . $year . ".\n";
 fetchTeam($league, $teamId, $year, $teamsDir, $db);

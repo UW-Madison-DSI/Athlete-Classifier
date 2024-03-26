@@ -92,6 +92,15 @@ body {
 			border: 2px solid white;
 		}
 
+		.report {
+			width: 200px;
+			margin-bottom: 20px;
+
+			&:hover {
+				animation: growing-bounce-keyframes 0.3s ease-in-out;
+			}
+		}
+
 		.label {
 			font-size: 100%;
 		}
