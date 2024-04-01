@@ -1,7 +1,7 @@
 <?php
 /******************************************************************************\
 |                                                                              |
-|                           fetch_team_athletes.php                            |
+|                              fetch_athletes.php                              |
 |                                                                              |
 |******************************************************************************|
 |                                                                              |
@@ -17,7 +17,6 @@
 \******************************************************************************/
 
 include "models/athlete.php";
-include "models/team.php";
 include 'utilities/database.php';
 
 //
@@ -33,7 +32,7 @@ include 'utilities/database.php';
  * @param  object $db - The database to store athlete data.
  * @return App\Models\Athlete
  */
-function fetchTeamAthlete($league, $id, $athletesDir, $db) {
+function fetchAthlete($league, $id, $athletesDir, $db) {
 
 	// create athlete
 	//
@@ -46,10 +45,25 @@ function fetchTeamAthlete($league, $id, $athletesDir, $db) {
 	//
 	$athlete->fetch();
 
+	// find first letter of athlete's last name
+	//
+	$lastName = $athlete->get('lastName');
+	$firstLetter = substr($lastName, 0, 1);
+	if ($firstLetter == '[') {
+		return;
+	}
+
+	// create letter directory, if necessary
+	//
+	$letterDir = ($athletesDir? $athletesDir . '/' : '') . $firstLetter;
+	if (!file_exists($letterDir)) {
+		mkdir($letterDir);
+	}
+
 	// skip athlete if they already exist
 	//
 	$fullName = $athlete->get('fullName');
-	$athleteDir = $athletesDir . '/' . $fullName;
+	$athleteDir = $letterDir . '/' . $fullName;
 	if (file_exists($athleteDir)) {
 		echo "skipping " . $fullName . ", already exists. \n";
 		return;
@@ -79,10 +93,6 @@ function fetchTeamAthlete($league, $id, $athletesDir, $db) {
 	//
 	$athlete->storeDemographics($db, $athleteDir);
 
-	// save athlete skin tones in file system
-	//
-	$athlete->saveSkinTone($athleteDir);
-
 	// return new athlete
 	//
 	return $athlete;
@@ -92,63 +102,53 @@ function fetchTeamAthlete($league, $id, $athletesDir, $db) {
  * Fetch all athletes and save them to the file system and database.
  *
  * @param string $league - The league of the teams to fetch.
- * @param string $teamId - The id of the team to fetch athletes from.
- * @param int $year - The year of the team to fetch.
- * @param string $teamsDir - The directory name to save team data.
+ * @param string $athletesDir - The directory name to save athelete data.
  * @param object $db - The database to store athelete data.
+ * @param int $start - The first athelete to save.
  */
-function fetchTeamAthletes(string $league, string $teamId, int $year, string $teamsDir, $db) {
+function fetchAthletes(string $league, string $athletesDir, $db, int $start = 0) { 
 
-	// create team
+	// fetch athletes
 	//
-	$team = new Team([
-		'league' => $league,
-		'id' => $teamId,
-		'year' => $year
-	]);
-
-	// fetch team athletes
-	//
-	$url = $team->url() . '/athletes?limit=1000';
-	$athletes = json_decode(file_get_contents($url));
+	$athletes = json_decode(file_get_contents(Athlete::baseUrl($league)));
 	if (!$athletes) {
 		return;
-	}
-
-	// get team info
-	//
-	$team->fetch();
-	$teamName = $team->get('displayName');
-	if (!$teamName) {
-		return;
-	}
-
-	// create team directory
-	//
-	$teamDir = $teamsDir . '/' . $teamName;
-	if (!file_exists($teamDir)) {
-		mkdir($teamDir);
 	}
 	
 	// show athlete metadata
 	//
-	echo "Fetching athletes from " . $teamName . "\n";
 	echo "athletes count = " . $athletes->count . "\n";
+	echo "page size = " . $athletes->pageSize . "\n";
+	echo "page count = " . $athletes->pageCount . "\n";
 
-	// iterate over athletes
+	// iterate over athlete pages
 	//
-	for ($i = 0; $i < count($athletes->items); $i++) {
-		$item = $athletes->items[$i];
-		if ($item) {
+	for ($i = 0; $i < $athletes->pageCount; $i++) {
+		$index = ($i * $athletes->pageSize);
+		if ($index >= $start) {
+			$data = json_decode(file_get_contents(Athlete::baseUrl($league) . '?page=' . $i));
+			if ($data) {
+				for ($j = 0; $j < count($data->items); $j++) {
+					$index = ($i * $athletes->pageSize) + $j;
 
-			// parse athlete id from ref
-			//
-			$ref = $item->{'$ref'};
-			$id = basename(substr($ref, 0, strpos($ref, "?")));
+					// check if athlete is after start index
+					//
+					if ($index > $start) {
+						$item = $data->items[$j];
+						if ($item) {
 
-			// fetch individual athlete by id
-			//
-			fetchTeamAthlete($league, $id, $teamDir, $db);
+							// parse athlete id from ref
+							//
+							$ref = $item->{'$ref'};
+							$id = basename(substr($ref, 0, strpos($ref, "?")));
+
+							// fetch individual athlete by id
+							//
+							fetchAthlete($league, $id, $athletesDir, $db);
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -159,8 +159,8 @@ function fetchTeamAthletes(string $league, string $teamId, int $year, string $te
 
 // check command line arguments
 //
-if (count($argv) < 3) {
-	echo "Usage: php fetch_athletes_by_team.php <LEAGUE> <TEAMID> [<YEAR>]\n";
+if (count($argv) < 2) {
+	echo "Usage: php fetch_athletes.php <LEAGUE> \n";
 	echo "Leagues: NFL, NCAA \n";
 	exit();
 }
@@ -168,19 +168,7 @@ if (count($argv) < 3) {
 // parse league
 //
 $league = $argv[1];
-$leagueDir = '../' . $league;
-
-// parse team
-//
-$teamId = $argv[2];
-
-// parse year
-//
-if (count($argv) >= 4) {
-	$year = intval($argv[3]);
-} else {
-	$year = 2023;
-}
+$leagueDir = '../../data/' . $league;
 
 // create new league directory
 //
@@ -188,13 +176,15 @@ if (!file_exists($leagueDir)) {
 	mkdir($leagueDir);
 }
 
-// create new teams directory
+// create new athletes directory
 //
-$teamsDir = $leagueDir . '/Teams';
-if (!file_exists($teamsDir)) {
-	mkdir($teamsDir);
+$athletesDir = $leagueDir . '/Athletes';
+if (!file_exists($athletesDir)) {
+	mkdir($athletesDir);
 }
 
-// fetch all athletes in team
+// fetch all athletes in league
 //
-fetchTeamAthletes($league, $teamId, $year, $teamsDir, $db);
+$start = 0;
+echo "Fetching " . $league . " athletes.\n";
+fetchAthletes($league, $athletesDir, $db, $start);

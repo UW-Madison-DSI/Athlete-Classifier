@@ -16,9 +16,9 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-$leagueTemplate = file_get_contents('templates/league.html');
-$stylesTemplate = file_get_contents('templates/league.css');
-$teamTemplate = file_get_contents('templates/team.tpl');
+$leagueTemplate = file_get_contents('../templates/league.html');
+$stylesTemplate = file_get_contents('../templates/league.css');
+$teamTemplate = file_get_contents('../templates/team.tpl');
 
 //
 // methods
@@ -75,14 +75,14 @@ if (count($argv) != 2) {
 
 $path = $argv[1];
 $name = basename($argv[1]);
-$leagueLogo = $name . '.png';
+$leagueLogo = $name . '.svg';
 
 echo "path = " . $path . "\n";
 
 // create web page
 //
 $html = $leagueTemplate;
-$html = str_replace('<%= logo %>', $leagueLogo, $html);
+$html = str_replace('<%= logo %>', 'images/' . $leagueLogo, $html);
 $html = str_replace('<%= title %>', $name, $html);
 $html = str_replace('<%= items %>', webifyLeague($path . '/Teams'), $html);
 file_put_contents($path . '/index.html', $html);

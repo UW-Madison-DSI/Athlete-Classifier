@@ -1,24 +1,31 @@
 		<div class="player">
-			<div class="thumbnail" style="background-image:url('<%= src %>')"></div>
-			
+
+			<a href="<%= href %>" target="_blank" class="lightbox" title="<%= name %>">
+				<div class="thumbnail" style="background-image:url('<%= icon %>')"></div>
+			</a>
+
 			<div class="info">
 				<div class="name"><%= name %></div>
 
 				<br />
 
+				<a href="<%= report %>" target="_blank" class="lightbox" title="<%= name %> Skin Tone Report">
+					<img class="report" src="<%= report %>" />
+				</a>
+
 				<div class="skin-tone color">
 					<div class="label">Skin Tone</div>
-					<div class="value" style="background-color:<%= skin_tone %>"></div>
+					<div class="value" style="background-color:<%= skin_tone %>" data-toggle="tooltip" title="Color: <%= tone_label %>"></div>
 				</div>
 
 				<div class="dominant color">
 					<div class="label">Dominant Color1 (<%= dominant_strength1 %>%)</div>
-					<div class="value" style="background-color:<%= dominant_color1 %>"></div>
+					<div class="value" style="background-color:<%= dominant_color1 %>" data-toggle="tooltip" title="Color: <%= dominant_color1 %>"></div>
 				</div>
 
 				<div class="dominant color">
 					<div class="label">Dominant Color2 (<%= dominant_strength2 %>%)</div>
-					<div class="value" style="background-color:<%= dominant_color2 %>"></div>
+					<div class="value" style="background-color:<%= dominant_color2 %>" data-toggle="tooltip" title="Color: <%= dominant_color2 %>"></div>
 				</div>
 
 				<br />

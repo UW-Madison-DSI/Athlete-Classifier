@@ -120,7 +120,7 @@ if (count($argv) < 2) {
 // parse league
 //
 $league = $argv[1];
-$leagueDir = '../' . $league;
+$leagueDir = '../../data/' . $league;
 
 // parse year
 //

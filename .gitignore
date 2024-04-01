@@ -4,6 +4,8 @@
 log/
 *.swp
 .env
-academic_analytics_content.sql
 links/
 data/
+testing
+NCAA
+NFL

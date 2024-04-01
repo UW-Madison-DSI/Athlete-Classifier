@@ -16,9 +16,22 @@
 |  Copyright (C) 2024 Data Science Institute, Univeristy of Wisconsin-Madison  |
 \******************************************************************************/
 
-$teamTemplate = file_get_contents('templates/team.html');
-$stylesTemplate = file_get_contents('templates/team.css');
-$playerTemplate = file_get_contents('templates/player.tpl');
+$teamTemplate = file_get_contents('../templates/team.html');
+$stylesTemplate = file_get_contents('../templates/team.css');
+$playerTemplate = file_get_contents('../templates/player.tpl');
+
+$monkTones = [
+	'Monk01' => '#f6ede4',
+	'Monk02' => '#f3e7db',
+	'Monk03' => '#f7ead0',
+	'Monk04' => '#eadaba',
+	'Monk05' => '#d7bd96',
+	'Monk06' => '#a07e56',
+	'Monk07' => '#825c43',
+	'Monk08' => '#604134',
+	'Monk09' => '#3a312a',
+	'Monk10' => '#292420'
+];
 
 //
 // methods
@@ -52,10 +65,14 @@ function webifyAthlete($athlete, $directory) {
 	// compute substitutions
 	//
 	$src = $athlete . '/' . $athlete . '.png';
+	$report = $athlete . '/' . $athlete . ' Report.png';
 
 	// compute skin tone info
 	//
-	$faceSkinTone = $skinTone->faces[0]->skin_tone;
+	global $monkTones;
+	// $faceSkinTone = $skinTone->faces[0]->skin_tone;
+	$toneLabel = $skinTone->faces[0]->tone_label;
+	$faceSkinTone = $monkTones[$toneLabel];
 	$dominantColor1 = $skinTone->faces[0]->dominant_colors[0]->color ?? 'black';
 	$dominantColor2 = $skinTone->faces[0]->dominant_colors[1]->color ?? 'black';
 	$dominantColor3 = $skinTone->faces[0]->dominant_colors[2]->color ?? 'black';
@@ -92,15 +109,18 @@ function webifyAthlete($athlete, $directory) {
 	//
 	global $playerTemplate;
 	$html = $playerTemplate;
-	$html = str_replace('<%= src %>', str_replace("'", "\'", $src), $html);
+	$html = str_replace('<%= href %>', $src, $html);
+	$html = str_replace('<%= icon %>', str_replace("'", "\'", $src), $html);
 	$html = str_replace('<%= name %>', $athlete, $html);
+	$html = str_replace('<%= report %>', $report, $html);
 
 	// format skin tones
 	//
 	$html = str_replace('<%= skin_tone %>', $faceSkinTone, $html);
+	$html = str_replace('<%= tone_label %>', $toneLabel, $html);
 	$html = str_replace('<%= dominant_color1 %>', $dominantColor1, $html);
-	$html = str_replace('<%= dominant_color2 %>', $dominantColor2, $html);
 	$html = str_replace('<%= dominant_strength1 %>', $dominantStrength1, $html);
+	$html = str_replace('<%= dominant_color2 %>', $dominantColor2, $html);
 	$html = str_replace('<%= dominant_strength2 %>', $dominantStrength2, $html);
 
 	// format race info
