@@ -9,7 +9,7 @@
 
 # Athlete Classifier
 
-The Athlete Classifier is a simple utility for downloading, organizing, and classifying NFL and NCAA athelete data using the [ESPN API](API.md).  It can be used to perform various types of analysis of player data, including ethnographic analysis.
+The Athlete Classifier is a simple utility for downloading, organizing, and classifying NFL and NCAA athelete data using the [ESPN API](documentation/API.md).  It can be used to perform various types of analysis of player data, including ethnographic analysis.
 
 ![Screen Shot](images/badgers.png)
 
